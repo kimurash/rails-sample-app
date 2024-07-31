@@ -18,7 +18,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     # :successはステータスコード200を表す
     assert_response :success
     # 特定のHTMLタグが存在するかどうかをテスト
-    assert_select "title", "Home | #{@base_title}"
+    assert_select "title", "#{@base_title}"
   end
 
   test "should get help" do
