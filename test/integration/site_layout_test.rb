@@ -19,8 +19,8 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", about_path
     assert_select "a[href=?]", contact_path
 
-    # Contactのリンクをクリックして正しいページに遷移するかテスト
-    get contact_path
-    assert_select "title", full_title("Contact")
+    # Sign upのリンクをクリックして正しいページに遷移するかテスト
+    get signup_path
+    assert_select "title", full_title("Sign up")
   end
 end
