@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # Defines the named routes for the user controller
   get '/signup', to: 'users#new'
 
+  get    '/login',  to: 'sessions#new'
+  post   '/login',  to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
+
   # ユーザーのURLを生成するための名前付きルーティング
   # RESTfulなUsersリソースで必要となるすべてのアクションが利用できるようになる
   resources :users
