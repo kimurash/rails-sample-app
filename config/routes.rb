@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'user/new'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -10,9 +9,9 @@ Rails.application.routes.draw do
   get '/contact', to: 'static_pages#contact'
 
   # Defines the named routes for the user controller
-  get '/signup', to: 'user#new'
+  get '/signup', to: 'users#new'
 
   # ユーザーのURLを生成するための名前付きルーティング
   # RESTfulなUsersリソースで必要となるすべてのアクションが利用できるようになる
-  resources :user
+  resources :users
 end
