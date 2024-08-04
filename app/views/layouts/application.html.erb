@@ -9,6 +9,9 @@
   <body>
     <%= render 'layouts/header' %>
     <div class="container">
+      <% flash.each do |msg_type, msg| %>
+        <%= content_tag(:div, msg, class: "alert alert-#{msg_type}") %>
+      <% end %>
       <%# ここにERBに内容が展開される %>
       <%= yield %>
     </div>
