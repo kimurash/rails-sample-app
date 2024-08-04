@@ -1,0 +1,29 @@
+require 'test_helper'
+
+class UsersSignupTest < ActionDispatch::IntegrationTest
+  # test "the truth" do
+  #   assert true
+  # end
+
+  test 'invalid signup information' do
+    get signup_path
+    assert_no_difference 'User.count' do
+      post users_path, params: {
+        user: {
+          name: '',
+          email: 'user@invalid',
+          password: 'foo',
+          password_confirmation: 'bar'
+        }
+      }
+    end
+    # HTTPステータスが正しいことを確認
+    assert_response :unprocessable_entity
+    # ユーザー登録画面が再描画されることを確認
+    assert_template 'users/new'
+
+    # エラーメッセージが表示されることを確認
+    assert_select 'div#error_explanation'
+    assert_select 'div.alert-danger'
+  end
+end
