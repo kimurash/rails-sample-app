@@ -2,8 +2,8 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user       = users(:michael)
-    @other_user = users(:archer)
+    @admin = users(:michael)
+    @non_admin = users(:archer)
   end
 
   test 'should get new' do
@@ -12,35 +12,75 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect edit when not logged in' do
-    get edit_user_path(@user)
+    get edit_user_path(@admin)
     assert_not flash.empty?
     assert_redirected_to login_url
   end
 
   test 'should redirect edit when logged in as wrong user' do
-    log_in_as(@other_user)
-    get edit_user_path(@user)
+    log_in_as(@non_admin)
+    get edit_user_path(@admin)
     assert flash.empty?
     assert_redirected_to root_url
   end
 
   test 'should redirect update when not logged in' do
-    patch user_path(@user), params: { user: { name: @user.name, email: @user.email } }
+    patch user_path(@admin), params: { user: { name: @admin.name, email: @admin.email } }
     assert_not flash.empty?
     assert_redirected_to login_url
   end
 
   test 'should redirect update when logged in as wrong user' do
-    log_in_as(@other_user)
-    patch user_path(@user), params: { user: { name: @user.name, email: @user.email } }
+    log_in_as(@non_admin)
+    patch user_path(@admin), params: { user: { name: @admin.name, email: @admin.email } }
     assert flash.empty?
     assert_redirected_to root_url
   end
 
   test 'should mot allow the admin attribute to be edited via the web' do
-    log_in_as(@other_user)
-    assert_not @other_user.admin?
-    patch user_path(@other_user), params: { user: { password: '', password_confirmation: '', admin: true } }
-    assert_not @other_user.reload.admin?
+    log_in_as(@non_admin)
+    assert_not @non_admin.admin?
+    patch user_path(@non_admin), params: { user: { password: '', password_confirmation: '', admin: true } }
+    assert_not @non_admin.reload.admin?
+  end
+
+  test 'should redirect destroy when not logged in' do
+    assert_no_difference 'User.count' do
+      delete user_path(@admin)
+    end
+    assert_response :see_other
+    assert_redirected_to login_url
+  end
+
+  test 'should redirect destroy when logged in as a non-admin' do
+    log_in_as(@non_admin)
+    assert_no_difference 'User.count' do
+      delete user_path(@admin)
+    end
+    assert_response :see_other
+    assert_redirected_to root_url
+  end
+
+  test 'index as admin including pagination and delete links' do
+    log_in_as(@admin)
+    get users_path
+    assert_template 'users/index'
+    assert_select 'div.pagination'
+    first_page_of_users = User.paginate(page: 1)
+    first_page_of_users.each do |user|
+      assert_select 'a[href=?]', user_path(user), text: user.name
+      assert_select 'a[href=?]', user_path(user), text: 'delete' unless user == @admin
+    end
+    assert_difference 'User.count', -1 do
+      delete user_path(@non_admin)
+      assert_response :see_other
+      assert_redirected_to users_url
+    end
+  end
+
+  test 'index as non-admin' do
+    log_in_as(@non_admin)
+    get users_path
+    assert_select 'a', text: 'delete', count: 0
   end
 end
