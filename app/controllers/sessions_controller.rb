@@ -1,7 +1,5 @@
 class SessionsController < ApplicationController
-  def new
-    debugger
-  end
+  def new; end
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
