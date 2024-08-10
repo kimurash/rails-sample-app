@@ -1,17 +1,18 @@
 class SessionsController < ApplicationController
   def new; end
 
+  # rubocop:disable Metrics/AbcSize
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user&.authenticate(params[:session][:password])
+    @user = User.find_by(email: params[:session][:email].downcase)
+    if @user&.authenticate(params[:session][:password])
       # セッション固定を防ぐために
       # ログインの直前に必ずセッションをリセットする
       reset_session
       # ユーザーを記憶する
-      remember(user)
+      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
       # ログイン後にユーザー情報のページにリダイレクトする
-      log_in(user)
-      redirect_to user
+      log_in(@user)
+      redirect_to @user
     else
       # エラーメッセージを作成する
       flash.now[:danger] = 'Invalid email/password combination'
