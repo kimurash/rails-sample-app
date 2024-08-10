@@ -7,8 +7,10 @@ class SessionsController < ApplicationController
       # セッション固定を防ぐために
       # ログインの直前に必ずセッションをリセットする
       reset_session
+      # ユーザーを記憶する
+      remember(user)
       # ログイン後にユーザー情報のページにリダイレクトする
-      log_in user
+      log_in(user)
       redirect_to user
     else
       # エラーメッセージを作成する
@@ -18,7 +20,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    log_out if logged_in?
     redirect_to root_url, status: :see_other
   end
 end
