@@ -71,7 +71,7 @@ class User < ApplicationRecord
   end
 
   # セッションハイジャック防止のためにセッショントークンを返す
-  # この記憶ダイジェストを再利用しているのは単に利便性のため
+  # 記憶ダイジェストを再利用しているのは単に利便性のため
   def session_token
     remember_digest || remember
   end
@@ -109,5 +109,10 @@ class User < ApplicationRecord
   # パスワード再設定のメールを送信する
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
+  end
+
+  # パスワード再設定の期限が切れている場合はtrueを返す
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
   end
 end
