@@ -1,5 +1,6 @@
 require 'active_support/core_ext/integer/time'
 
+# rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -69,4 +70,9 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.log_level = :debug
+
+  host = 'localhost:3000'
+
+  # localhostで開発している場合は以下をお使いください
+  config.action_mailer.default_url_options = { host:, protocol: 'http' }
 end
