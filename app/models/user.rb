@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
 
-  before_save { email.downcase! }
+  before_save :downcase_email
+  before_create :create_activation_digest
 
   validates(
     :name,
@@ -25,8 +26,6 @@ class User < ApplicationRecord
     }
   )
 
-  has_secure_password
-
   validates(
     :password,
     {
@@ -35,6 +34,23 @@ class User < ApplicationRecord
       allow_nil: true
     }
   )
+
+  has_secure_password
+
+  private
+
+  # メールアドレスを小文字に変換する
+  def downcase_email
+    email.downcase!
+  end
+
+  # 有効化トークンとダイジェストを作成および代入する
+  def create_activation_digest
+    self.activation_token = User.new_token
+    self.activation_digest = User.digest(activation_token)
+  end
+
+  public
 
   # 渡された文字列のハッシュ値を返す
   def self.digest(string)
