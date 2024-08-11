@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   post   '/login',  to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
+  get '/microposts', to: 'static_pages#home'
+
   # ユーザーのURLを生成するための名前付きルーティング
   # RESTfulなUsersリソースで必要となるすべてのアクションが利用できるようになる
   resources :users
