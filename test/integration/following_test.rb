@@ -8,13 +8,7 @@ class Following < ActionDispatch::IntegrationTest
   end
 end
 
-class FollowingTest < Following
-  def setup
-    @user  = users(:michael)
-    @other = users(:archer)
-    log_in_as(@user)
-  end
-
+class FollowPagesTest < Following
   test 'following page' do
     get following_user_path(@user)
     assert_response :success
@@ -31,6 +25,13 @@ class FollowingTest < Following
     assert_match @user.followers.count.to_s, response.body
     @user.followers.each do |user|
       assert_select 'a[href=?]', user_path(user), count: 3
+    end
+  end
+
+  test 'feed on Home page' do
+    get root_path
+    @user.feed.paginate(page: 1, per_page: 10).each do |micropost|
+      assert_match CGI.escapeHTML(micropost.content), response.body
     end
   end
 end
