@@ -19,9 +19,14 @@ Rails.application.routes.draw do
 
   # ユーザーのURLを生成するための名前付きルーティング
   # RESTfulなUsersリソースで必要となるすべてのアクションが利用できるようになる
-  resources :users
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
 
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: %i[new create edit update]
   resources :microposts,          only: %i[create destroy]
+  resources :relationships,       only: %i[create destroy]
 end
