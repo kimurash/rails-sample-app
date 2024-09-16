@@ -24,7 +24,7 @@ Railsサーバーが立ち上がり、シンプルブラウザが表示される
 開発環境でPostgreSQLではなくSQLiteが使われるように設定します。
 
 ```
-bundle config set --local without 'production'
+$ bundle config set --local without 'production'
 ```
 
 データベースへのマイグレーションを実行します。
