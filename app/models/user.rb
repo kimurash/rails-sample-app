@@ -1,5 +1,4 @@
-# rubocop:disable Metrics
-class User < ApplicationRecord
+class User < ApplicationRecord # rubocop:disable Metrics
   has_many :microposts, dependent: :destroy
   has_many :active_relationships,
            class_name: 'Relationship',

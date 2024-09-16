@@ -1,7 +1,6 @@
 require 'test_helper'
 
-# rubocop:disable Metrics
-class UserTest < ActiveSupport::TestCase
+class UserTest < ActiveSupport::TestCase # rubocop:disable Metrics
   def setup
     @user =
       User.new(
