@@ -39,4 +39,22 @@ RSpec.describe 'Sessions', type: :system do
       end
     end
   end
+
+  describe '#destroy' do
+    let(:user) { FactoryBot.create(:user) }
+
+    before do
+      visit login_path
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: 'password'
+      click_button 'Log in'
+      click_link 'Log out'
+    end
+
+    it 'has right links' do
+      expect(page).to have_link 'Log in', href: login_path
+      expect(page).not_to have_link 'Log out', href: logout_path
+      expect(page).not_to have_link 'Profile', href: user_path(user)
+    end
+  end
 end

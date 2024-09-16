@@ -34,6 +34,20 @@ RSpec.describe 'Sessions', type: :request do
         expect(logged_in?).to be_truthy
       end
     end
+
+    describe 'remember me' do
+      let(:user) { FactoryBot.create(:user) }
+
+      it 'remembers user' do
+        log_in_as(user, remember_me: '1')
+        expect(cookies[:remember_token]).to_not be_blank
+      end
+
+      it 'does not remember user' do
+        log_in_as(user, remember_me: '0')
+        expect(cookies[:remember_token]).to be_blank
+      end
+    end
   end
 
   describe 'DELETE /logout' do
@@ -45,6 +59,7 @@ RSpec.describe 'Sessions', type: :request do
     end
 
     it 'logs out' do
+      delete logout_path
       delete logout_path
       expect(response).to have_http_status(:see_other)
       expect(response).to redirect_to root_path
