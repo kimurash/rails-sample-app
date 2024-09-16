@@ -22,7 +22,6 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'does not create a user' do
-        # ブロック内を実行する前後でUser.countが変化しないことを確認
         expect { post(users_path, params: user_params) }.to_not change(User, :count)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template(:new)
@@ -42,10 +41,9 @@ RSpec.describe 'Users', type: :request do
       end
 
       it 'creates a user' do
-        # ブロック内を実行する前後でUser.countが1増えることを確認
         expect { post(users_path, params: user_params) }.to change(User, :count).by(1)
         expect(response).to have_http_status(:found)
-        expect(response).to redirect_to user_path(User.last)
+        expect(response).to redirect_to root_url
       end
     end
   end

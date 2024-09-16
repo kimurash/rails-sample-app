@@ -1,8 +1,7 @@
 class SessionsController < ApplicationController
   def new; end
 
-  # rubocop:disable Metrics
-  def create
+  def create # rubocop:disable Metrics
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user&.authenticate(params[:session][:password])
       if @user.activated?
