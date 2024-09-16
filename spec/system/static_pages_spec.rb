@@ -15,4 +15,25 @@ RSpec.describe 'StaticPages', type: :system do
       expect(page).to have_link 'Contact', href: contact_path
     end
   end
+
+  describe 'help' do
+    it 'has right title' do
+      visit help_path
+      expect(page).to have_title full_title('Help')
+    end
+  end
+
+  describe 'about' do
+    it 'has right title' do
+      visit about_path
+      expect(page).to have_title full_title('About')
+    end
+  end
+
+  describe 'contact' do
+    it 'has right title' do
+      visit contact_path
+      expect(page).to have_title full_title('Contact')
+    end
+  end
 end
