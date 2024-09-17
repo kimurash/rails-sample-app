@@ -53,8 +53,7 @@ end
 class PasswordResetForm < PasswordResets
   def setup
     super
-    # 正しいメールアドレスを送信して
-    # 再設定用のトークンを生成
+    # 正しいメールアドレスを送信して再設定用のトークンを生成
     post password_resets_path,
          params: { password_reset: { email: @user.email } }
     @reset_user = assigns(:user)

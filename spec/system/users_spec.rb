@@ -67,7 +67,7 @@ RSpec.describe 'Users', type: :system do
         fill_in 'Name', with: ''
         fill_in 'Email', with: 'user@invalid'
         fill_in 'Password', with: 'foo'
-        fill_in 'Password confirmation', with: 'bar'
+        fill_in 'Confirmation', with: 'bar'
         click_button 'Create my account'
       end
 
@@ -102,7 +102,7 @@ RSpec.describe 'Users', type: :system do
           fill_in 'Name', with: ''
           fill_in 'Email', with: 'user@invalid'
           fill_in 'Password', with: 'foo'
-          fill_in 'Password confirmation', with: 'bar'
+          fill_in 'Confirmation', with: 'bar'
           click_button 'Save changes'
         end
 
