@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
+  # ユーザー登録ページの取得
   describe 'GET /signup' do
     it 'returns OK' do
       get signup_path
@@ -8,6 +9,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  # ユーザー一覧ページの取得
   describe 'GET /users' do
     let(:user) { FactoryBot.create(:michael) }
 
@@ -22,6 +24,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  # ユーザー登録
   describe 'POST /users' do
     context 'with invalid information' do
       let(:user_params) do
@@ -67,6 +70,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  # ユーザー詳細ページの取得
   describe 'GET /users/:id' do
     context 'when user is inactive' do
       let(:inactive_user) { FactoryBot.create(:malory) }
@@ -93,6 +97,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  # ユーザー編集ページの取得
   describe 'GET /users/:id/edit' do
     let(:user) { FactoryBot.create(:michael) }
 
@@ -138,6 +143,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  # ユーザー情報の更新
   describe 'PATCH /users/:id' do
     let(:user) { FactoryBot.create(:michael) }
 
@@ -249,6 +255,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  # ユーザー削除
   describe 'DELETE /users/:id' do
     let!(:admin) { FactoryBot.create(:michael) }
     let!(:non_admin) { FactoryBot.create(:archer) }

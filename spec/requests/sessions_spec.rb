@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Sessions', type: :request do
+  # ログインページの取得
   describe 'GET /login' do
     it 'returns OK' do
       get login_path
@@ -35,6 +36,7 @@ RSpec.describe 'Sessions', type: :request do
       end
     end
 
+    # ログイン状態の保持
     describe 'remember me' do
       let(:user) { FactoryBot.create(:michael) }
 
@@ -50,6 +52,7 @@ RSpec.describe 'Sessions', type: :request do
     end
   end
 
+  # ログアウト
   describe 'DELETE /logout' do
     let(:user) { FactoryBot.create(:michael) }
 

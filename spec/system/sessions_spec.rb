@@ -5,6 +5,7 @@ RSpec.describe 'Sessions', type: :system do
     driven_by(:rack_test)
   end
 
+  # ログイン
   describe '#create' do
     let(:user) { FactoryBot.create(:michael) }
 
@@ -34,6 +35,7 @@ RSpec.describe 'Sessions', type: :system do
     end
   end
 
+  # ログアウト
   describe '#destroy' do
     let(:user) { FactoryBot.create(:michael) }
 

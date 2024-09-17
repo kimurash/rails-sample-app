@@ -23,6 +23,7 @@ FactoryBot.define do
     activated_at { Time.zone.now }
   end
 
+  # 有効化されていないユーザー
   factory :malory, class: User do
     name { 'Malory Archer' }
     email { 'boss@example.gov' }

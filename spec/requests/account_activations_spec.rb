@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'AccountActivations', type: :request do
+  # アカウントを有効化する
   describe 'Get /account_activations/:id/edit' do
     before do
       post(
@@ -53,12 +54,6 @@ RSpec.describe 'AccountActivations', type: :request do
       it 'redirects to user page' do
         expect(flash[:success]).to be_present
         expect(response).to redirect_to user_path(@reset_user)
-      end
-    end
-
-    describe 'PATCH /account_activations/:id' do
-      before do
-        patch account_activation_path(@reset_user.activation_token)
       end
     end
   end

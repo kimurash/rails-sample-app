@@ -7,6 +7,7 @@ RSpec.describe 'PasswordResets', type: :system do
     driven_by(:rack_test)
   end
 
+  # パスワード再設定申請ページの取得
   describe '#new' do
     before do
       visit new_password_reset_path
@@ -17,6 +18,7 @@ RSpec.describe 'PasswordResets', type: :system do
     end
   end
 
+  # パスワード再設定ページの取得
   describe '#edit' do
     before do
       user.create_reset_digest
@@ -32,6 +34,7 @@ RSpec.describe 'PasswordResets', type: :system do
       )
     end
 
+    # パスワード再設定
     describe '#update' do
       it 'does not update with invalid password and confirmation' do
         fill_in 'Password', with: 'foobaz'

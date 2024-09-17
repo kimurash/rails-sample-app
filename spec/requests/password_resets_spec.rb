@@ -7,6 +7,7 @@ RSpec.describe 'PasswordResets', type: :request do
     ActionMailer::Base.deliveries.clear
   end
 
+  # パスワード再設定申請ページの取得
   describe 'GET /password_resets/new' do
     before do
       get new_password_reset_path
@@ -17,6 +18,7 @@ RSpec.describe 'PasswordResets', type: :request do
     end
   end
 
+  # パスワード再設定トークンの発行
   describe 'POST /password_resets' do
     context 'with invalid email' do
       before do
@@ -42,6 +44,7 @@ RSpec.describe 'PasswordResets', type: :request do
     end
   end
 
+  # パスワード再設定ページの取得
   describe 'GET /password_resets/edit' do
     let(:user) { FactoryBot.create(:michael) }
 
@@ -104,6 +107,7 @@ RSpec.describe 'PasswordResets', type: :request do
     end
   end
 
+  # パスワード再設定
   describe 'PATCH /password_resets' do
     before do
       post password_resets_path, params: { password_reset: { email: user.email } }

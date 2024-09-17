@@ -5,6 +5,7 @@ RSpec.describe 'Users', type: :system do
     driven_by(:rack_test)
   end
 
+  # ユーザ登録ページの取得
   describe '#signup' do
     it 'has right title' do
       visit signup_path
@@ -12,6 +13,7 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
+  # ユーザ一覧ページの取得
   describe '#index' do
     let!(:admin) { FactoryBot.create(:michael) }
     let!(:non_admin) { FactoryBot.create(:archer) }
@@ -53,6 +55,7 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
+  # ユーザ登録ページの取得
   describe '#new' do
     it 'has right title' do
       visit signup_path
@@ -60,6 +63,7 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
+  # ユーザ登録
   describe '#create' do
     context 'with invalid information' do
       before do
@@ -78,6 +82,7 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
+  # ユーザ情報の編集
   describe '#update' do
     let(:user) { FactoryBot.create(:michael) }
 
