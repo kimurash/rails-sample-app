@@ -40,15 +40,55 @@ RSpec.describe 'Users', type: :request do
     context 'with valid information' do
       let(:user_params) do
         {
-          user: { name: 'Example User', email: 'user@example.com', password: 'password',
-                  password_confirmation: 'password' }
+          user: { name: 'Example User', email: 'user@example.com',
+                  password: 'password', password_confirmation: 'password' }
         }
       end
 
-      it 'creates a user' do
+      before do
+        ActionMailer::Base.deliveries.clear
+      end
+
+      it 'creates a user temporary' do
         expect { post(users_path, params: user_params) }.to change(User, :count).by(1)
         expect(flash[:info]).to be_present
         expect(response).to redirect_to root_url
+      end
+
+      it 'sends an activation email' do
+        post(users_path, params: user_params)
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+      end
+
+      it 'does not activate the user' do
+        post(users_path, params: user_params)
+        expect(User.last.activated?).to be_falsey
+      end
+    end
+  end
+
+  describe 'GET /users/:id' do
+    context 'when user is inactive' do
+      let(:inactive_user) { FactoryBot.create(:malory) }
+
+      before do
+        get user_path(inactive_user)
+      end
+
+      it 'redirects to the root page' do
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context 'when user is activated' do
+      let(:activated_user) { FactoryBot.create(:michael) }
+
+      before do
+        get user_path(activated_user)
+      end
+
+      it 'renders the user page' do
+        expect(response).to render_template(:show)
       end
     end
   end

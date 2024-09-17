@@ -15,11 +15,16 @@ RSpec.describe 'Users', type: :system do
   describe '#index' do
     let!(:admin) { FactoryBot.create(:michael) }
     let!(:non_admin) { FactoryBot.create(:archer) }
+    let(:inactive_user) { FactoryBot.create(:malory) }
 
     context 'when logged in as non-admin user' do
       before do
         log_in_as(non_admin)
         visit users_path
+      end
+
+      it 'does not include inactive users' do
+        expect(page).not_to have_link inactive_user.name, href: user_path(inactive_user)
       end
 
       it 'does not have delete links' do

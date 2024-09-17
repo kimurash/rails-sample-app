@@ -12,6 +12,7 @@ FactoryBot.define do
     email { 'duchess@example.gov' }
     password_digest { User.digest('password') }
     activated { true }
+    activated_at { Time.zone.now }
   end
 
   factory :lana, class: User do
@@ -19,13 +20,13 @@ FactoryBot.define do
     email { 'hands@example.gov' }
     password_digest { User.digest('password') }
     activated { true }
+    activated_at { Time.zone.now }
   end
 
   factory :malory, class: User do
     name { 'Malory Archer' }
     email { 'boss@example.gov' }
     password_digest { User.digest('password') }
-    activated { true }
   end
 
   factory :seq_users, class: User do
@@ -33,5 +34,6 @@ FactoryBot.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password_digest { User.digest('password') }
     activated { true }
+    activated_at { Time.zone.now }
   end
 end
