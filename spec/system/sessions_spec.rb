@@ -6,14 +6,11 @@ RSpec.describe 'Sessions', type: :system do
   end
 
   describe '#create' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:michael) }
 
     context 'with invalid information' do
       before do
-        visit login_path
-        fill_in 'Email', with: user.email
-        fill_in 'Password', with: 'invalid'
-        click_button 'Log in'
+        log_in_as(user, password: 'invalid')
       end
 
       it 'shows error message' do
@@ -26,10 +23,7 @@ RSpec.describe 'Sessions', type: :system do
 
     context 'with valid information' do
       before do
-        visit login_path
-        fill_in 'Email', with: user.email
-        fill_in 'Password', with: 'password'
-        click_button 'Log in'
+        log_in_as(user)
       end
 
       it 'has right links' do
@@ -41,13 +35,10 @@ RSpec.describe 'Sessions', type: :system do
   end
 
   describe '#destroy' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:michael) }
 
     before do
-      visit login_path
-      fill_in 'Email', with: user.email
-      fill_in 'Password', with: 'password'
-      click_button 'Log in'
+      log_in_as(user)
       click_link 'Log out'
     end
 

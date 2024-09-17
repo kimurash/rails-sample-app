@@ -6,13 +6,41 @@ RSpec.describe 'StaticPages', type: :system do
   end
 
   describe 'root' do
-    it 'has right links' do
-      visit root_path
-      link_to_root = page.find_all("a[href='#{root_path}']")
-      expect(link_to_root.count).to eq(2)
-      expect(page).to have_link 'Help', href: help_path
-      expect(page).to have_link 'About', href: about_path
-      expect(page).to have_link 'Contact', href: contact_path
+    context 'when not logged in' do
+      before do
+        visit root_path
+      end
+
+      it 'has right links' do
+        link_to_root = page.find_all("a[href='#{root_path}']")
+        expect(link_to_root.count).to eq(2)
+        expect(page).to have_link 'Help', href: help_path
+        expect(page).to have_link 'About', href: about_path
+        expect(page).to have_link 'Contact', href: contact_path
+      end
+    end
+
+    context 'when logged in' do
+      let!(:user) { FactoryBot.create(:archer) }
+
+      before do
+        log_in_as(user)
+        visit root_path
+      end
+
+      it 'has right links' do
+        expect(page).to have_link 'Users', href: users_path
+        expect(page).to have_link 'Profile', href: user_path(user)
+        expect(page).to have_link 'Settings', href: edit_user_path(user)
+        expect(page).to have_link 'Log out', href: logout_path
+
+        expect(page).to have_link "#{user.following.count} following", href: following_user_path(user)
+        expect(page).to have_link "#{user.followers.count} followers", href: followers_user_path(user)
+
+        # expect(page).to have_selector 'div.stats'
+        # expect(page).to have_selector '#following', text: @user.following.count
+        # expect(page).to have_selector '#followers', text: @user.followers.count
+      end
     end
   end
 

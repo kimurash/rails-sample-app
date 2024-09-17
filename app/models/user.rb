@@ -65,6 +65,7 @@ class User < ApplicationRecord # rubocop:disable Metrics
   public
 
   # 渡された文字列のハッシュ値を返す
+  # self.をつけるとクラスメソッドになる
   def self.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost:)

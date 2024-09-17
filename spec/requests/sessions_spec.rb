@@ -13,30 +13,30 @@ RSpec.describe 'Sessions', type: :request do
                                               password: '' } }
       end
 
-      it 'shows error message' do
+      # 実行効率を意識して1つのテストにまとめた
+      it 'renders new template with error message' do
+        expect(flash[:danger]).to be_present
         expect(response).to have_http_status(422)
         expect(response).to render_template(:new)
       end
     end
 
     context 'with valid information' do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { FactoryBot.create(:michael) }
 
       before do
-        post login_path, params: { session: { email: user.email,
-                                              password: 'password' } }
+        log_in_as(user)
       end
 
       it 'logs in' do
-        expect(response).to have_http_status(:found)
         expect(response).to redirect_to user_path(user)
-        # System specではsessionメソッドが使えないため
+        # System Specではsessionメソッドが使えないためRequest Specで確認
         expect(logged_in?).to be_truthy
       end
     end
 
     describe 'remember me' do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { FactoryBot.create(:michael) }
 
       it 'remembers user' do
         log_in_as(user, remember_me: '1')
@@ -51,11 +51,10 @@ RSpec.describe 'Sessions', type: :request do
   end
 
   describe 'DELETE /logout' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:michael) }
 
     before do
-      post login_path, params: { session: { email: user.email,
-                                            password: 'password' } }
+      log_in_as(user)
     end
 
     it 'logs out' do
@@ -63,7 +62,7 @@ RSpec.describe 'Sessions', type: :request do
       delete logout_path
       expect(response).to have_http_status(:see_other)
       expect(response).to redirect_to root_path
-      # System specではsessionメソッドが使えないため
+      # System specではsessionメソッドが使えないためRequest Specで確認
       expect(logged_in?).to be_falsey
     end
   end
