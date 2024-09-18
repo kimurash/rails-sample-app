@@ -82,6 +82,21 @@ RSpec.describe 'Users', type: :system do
     end
   end
 
+  describe '#show' do
+    let(:user) { FactoryBot.create(:michael) }
+
+    before do
+      log_in_as(user)
+      visit user_path(user)
+    end
+
+    it 'has right content' do
+      expect(page).to have_title full_title(user.name)
+      expect(page).to have_selector 'h1', text: user.name
+      expect(page).to have_selector 'h1>img.gravatar'
+    end
+  end
+
   # ユーザ情報の編集
   describe '#update' do
     let(:user) { FactoryBot.create(:michael) }

@@ -17,7 +17,7 @@ RSpec.describe 'Sessions', type: :request do
       # 実行効率を意識して1つのテストにまとめた
       it 'renders new template with error message' do
         expect(flash[:danger]).to be_present
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template(:new)
       end
     end
