@@ -1,6 +1,5 @@
 class AccountActivationsController < ApplicationController
-  # rubocop:disable Metrics
-  def edit
+  def edit # rubocop:disable Metrics
     user = User.find_by(email: params[:email])
     if user && !user.activated? && user.authenticated?(:activation, params[:id])
       user.activate

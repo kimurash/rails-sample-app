@@ -49,8 +49,7 @@ class PasswordResetsController < ApplicationController
 
   def edit; end
 
-  # rubocop:disable Metrics
-  def update
+  def update # rubocop:disable Metrics
     # 新しいパスワードと確認用パスワードが空文字列になっていないか
     # ユーザー情報の編集ではOKだった
     if params[:user][:password].empty?

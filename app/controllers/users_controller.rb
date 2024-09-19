@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  # beforeフィルター
   before_action :logged_in_user, only: %i[index edit update destroy following followers]
   before_action :correct_user,   only: %i[edit update]
   before_action :admin_user,     only: :destroy
@@ -18,8 +19,6 @@ class UsersController < ApplicationController
 
   public
 
-  # beforeフィルター
-
   # 正しいユーザーかどうか確認
   def correct_user
     @user = User.find(params[:id])
@@ -38,7 +37,10 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
-    redirect_to(root_url) and return unless @user.activated?
+    return if @user.activated?
+
+    redirect_to(root_url)
+    nil
   end
 
   def new
@@ -46,7 +48,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params) # 実装は終わっていないことに注意!
+    @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'

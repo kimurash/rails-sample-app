@@ -1,5 +1,4 @@
-# rubocop:disable Metrics
-class User < ApplicationRecord
+class User < ApplicationRecord # rubocop:disable Metrics
   has_many :microposts, dependent: :destroy
   has_many :active_relationships,
            class_name: 'Relationship',
@@ -66,6 +65,7 @@ class User < ApplicationRecord
   public
 
   # 渡された文字列のハッシュ値を返す
+  # self.をつけるとクラスメソッドになる
   def self.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost:)
