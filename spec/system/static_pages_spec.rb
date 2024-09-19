@@ -6,6 +6,13 @@ RSpec.describe 'StaticPages', type: :system do
   end
 
   describe 'root' do
+    it 'displays right following & followers count' do
+      user = FactoryBot.send(:create_relationships)
+      log_in_as(user)
+      expect(page).to have_content '10 following'
+      expect(page).to have_content '10 followers'
+    end
+
     context 'when not logged in' do
       before do
         visit root_path

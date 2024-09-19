@@ -87,13 +87,30 @@ RSpec.describe 'Users', type: :system do
 
     before do
       log_in_as(user)
-      visit user_path(user)
     end
 
-    it 'has right content' do
-      expect(page).to have_title full_title(user.name)
-      expect(page).to have_selector 'h1', text: user.name
-      expect(page).to have_selector 'h1>img.gravatar'
+    context 'without following & followers' do
+      before do
+        visit user_path(user)
+      end
+
+      it 'has right content' do
+        expect(page).to have_title full_title(user.name)
+        expect(page).to have_selector 'h1', text: user.name
+        expect(page).to have_selector 'h1>img.gravatar'
+      end
+    end
+
+    context 'with following & followers' do
+      before do
+        user = FactoryBot.send(:create_relationships)
+        visit user_path(user)
+      end
+
+      it 'displays following & followers count' do
+        expect(page).to have_content '10 following'
+        expect(page).to have_content '10 followers'
+      end
     end
   end
 
@@ -131,6 +148,42 @@ RSpec.describe 'Users', type: :system do
           expect(page).to have_selector 'div.alert-danger'
           expect(page).to have_content 'The form contains 4 errors.'
         end
+      end
+    end
+  end
+
+  describe '#following' do
+    let(:user) { FactoryBot.send(:create_relationships) }
+
+    before do
+      log_in_as(user)
+      visit following_user_path(user)
+    end
+
+    it 'displays following users' do
+      expect(page).to have_http_status(:success)
+
+      expect(page).to have_content user.following.count.to_s
+      user.following.each do |followed|
+        expect(page).to have_link followed.name, href: user_path(followed)
+      end
+    end
+  end
+
+  describe '#followers' do
+    let(:user) { FactoryBot.send(:create_relationships) }
+
+    before do
+      log_in_as(user)
+      visit followers_user_path(user)
+    end
+
+    it 'displays followers' do
+      expect(page).to have_http_status(:success)
+
+      expect(page).to have_content user.followers.count.to_s
+      user.followers.each do |follower|
+        expect(page).to have_link follower.name, href: user_path(follower)
       end
     end
   end

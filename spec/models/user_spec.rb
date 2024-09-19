@@ -96,4 +96,53 @@ RSpec.describe User, type: :model do
       expect(user.authenticated?(:remember, '')).to be false
     end
   end
+
+  # ======= フォロー&フォロー解除 =======
+
+  describe 'follow and unfollow' do
+    let(:michael) { FactoryBot.create(:michael) }
+    let(:archer) { FactoryBot.create(:archer) }
+
+    it 'follow and unfollow user' do
+      expect(michael.following?(archer)).to be false
+      michael.follow(archer)
+      expect(michael.following?(archer)).to be true
+      expect(archer.followers.include?(michael)).to be true
+      michael.unfollow(archer)
+      expect(michael.following?(archer)).to be false
+    end
+  end
+
+  # ======= フィード =======
+
+  describe 'feed' do
+    let(:michael) { FactoryBot.create(:michael) }
+    let(:archer) { FactoryBot.create(:archer) }
+    let(:lana) { FactoryBot.create(:lana) }
+
+    let(:post_by_michael) { FactoryBot.create(:recent_post) }
+    let(:post_by_archer) { FactoryBot.create(:ants) }
+    let(:post_by_lana) { FactoryBot.create(:tone) }
+
+    before do
+      michael.follow(archer)
+    end
+
+    it 'should have the right posts' do
+      # 自分自身の投稿
+      michael.microposts.each do |own_post|
+        expect(michael.feed.include?(own_post)).to be true
+      end
+
+      # フォローしているユーザの投稿
+      archer.microposts.each do |following_post|
+        expect(michael.feed.include?(following_post)).to be true
+      end
+
+      # フォローしていないユーザの投稿
+      lana.microposts.each do |unfollowed_post|
+        expect(michael.feed.include?(unfollowed_post)).to be false
+      end
+    end
+  end
 end

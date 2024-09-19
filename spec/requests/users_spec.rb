@@ -303,4 +303,34 @@ RSpec.describe 'Users', type: :request do
       end
     end
   end
+
+  # フォロ一覧
+  describe 'GET /users/:id/following' do
+    let(:user) { FactoryBot.create(:michael) }
+
+    context 'when not logged in' do
+      before do
+        get following_user_path(user)
+      end
+
+      it 'redirects to the login page' do
+        expect(response).to redirect_to(login_url)
+      end
+    end
+  end
+
+  # フォロワー一覧
+  describe 'GET /users/:id/followers' do
+    let(:user) { FactoryBot.create(:michael) }
+
+    context 'when not logged in' do
+      before do
+        get followers_user_path(user)
+      end
+
+      it 'redirects to the login page' do
+        expect(response).to redirect_to(login_url)
+      end
+    end
+  end
 end

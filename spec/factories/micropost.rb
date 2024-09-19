@@ -5,15 +5,21 @@ FactoryBot.define do
     user { association :archer }
   end
 
-  factory :orange, class: Micropost do
-    content { 'I just ate an orange!' }
+  factory :tone, class: Micropost do
+    content { "I'm sorry. Your words made sense, but your sarcastic tone did not." }
     created_at { 10.minutes.ago }
+    user { association :lana }
   end
 
   factory :recent_post, class: Micropost do
     content { 'Writing a short test' }
     created_at { Time.zone.now }
     user { association :michael, email: 'recent@example.com' }
+  end
+
+  factory :orange, class: Micropost do
+    content { 'I just ate an orange!' }
+    created_at { 10.minutes.ago }
   end
 end
 
